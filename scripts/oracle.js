@@ -2,7 +2,7 @@ require('dotenv').config({ path: process.env.ENV_FILE });
 const PriceOracle = require('..').PriceOracle;
 const cron = require('node-cron');
 
-var main = async () => {
+const main = async () => {
   // Load environment variables
   const lcdURL = process.env.LCD_URL;
   const mnemonic = process.env.MNEMONIC;
@@ -10,22 +10,21 @@ var main = async () => {
   const expiry = process.env.EXPIRY;
   const expiryThreshold = process.env.EXPIRY_THRESHOLD;
   const deviation = process.env.DEVIATION;
-  let feeAmount = process.env.FEE;
+  const feeDenom = process.env.FEE_DENOM;
+  const feeAmount = process.env.FEE;
+  const coinType = process.env.COIN_TYPE
+  const prefix = process.env.ADDR_PREFIX;
   let fee = { amount: [], gas: String(150000) };
-  let legacyHDPath = false;
-  if (process.env.LEGACY_HD_PATH === 'true') {
-    legacyHDPath = true;
-  }
   if (feeAmount !== '') {
     fee = {
-      amount: [{ denom: 'ukava', amount: feeAmount }],
+      amount: [{ denom: feeDenom, amount: feeAmount }],
       gas: String(150000),
     };
   }
 
   // Initiate price oracle
-  oracle = new PriceOracle(marketIDs, expiry, expiryThreshold, deviation, fee);
-  await oracle.initClient(lcdURL, mnemonic, legacyHDPath);
+  const oracle = new PriceOracle(marketIDs, expiry, expiryThreshold, deviation, fee);
+  await oracle.initClient(lcdURL, mnemonic, coinType, prefix);
 
   // Start cron job
   cron.schedule(process.env.CRONTAB, () => {

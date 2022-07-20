@@ -15,6 +15,7 @@
   "homepage": "https://github.com/Kava-Labs/kava-tools#readme",
   "dependencies": {
     "@kava-labs/javascript-sdk": "^9.0.2",
+    "@kava-labs/sig": "^0.1.0",
     "axios": "^0.21.1",
     "coingecko-api": "^1.0.10",
     "dotenv": "^8.2.0",
@@ -22,6 +23,7 @@
     "node-cron": "^2.0.3"
   },
   "devDependencies": {
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "standard": "^17.0.0"
   }
 }

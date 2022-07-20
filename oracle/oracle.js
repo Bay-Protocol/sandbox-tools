@@ -1,7 +1,7 @@
 require('dotenv').config();
 require('log-timestamp');
-const kava = require('@kava-labs/javascript-sdk');
-const prices = require(`./prices`).prices;
+const client = require('./client');
+const prices = require('./prices').prices;
 const utils = require('./utils').utils;
 
 /**
@@ -51,7 +51,7 @@ class PriceOracle {
    * @param {Boolean} legacyHDPath
    * @return {Promise}
    */
-  async initClient(lcdURL, mnemonic, legacyHDPath = false) {
+  async initClient(lcdURL, mnemonic, coinType = 118, prefix = 'cosmos') {
     if (!lcdURL) {
       throw new Error("chain's rest-server url is required");
     }
@@ -60,8 +60,9 @@ class PriceOracle {
     }
 
     // Initiate and set Kava client
-    this.client = new kava.KavaClient(lcdURL);
-    this.client.setWallet(mnemonic, '', legacyHDPath);
+    this.client = new client.Client(lcdURL);
+    this.client.setWallet(mnemonic, '', coinType, prefix);
+
     this.client.setBroadcastMode('sync');
     try {
       await this.client.initChain();
@@ -80,7 +81,7 @@ class PriceOracle {
     // fetch account data so we can manually manage sequence when posting
     let accountData
     try {
-      accountData = await kava.tx.loadMetaData(
+      accountData = await client.tx.loadMetaData(
         this.client.wallet.address,
         this.client.baseURI
       );
