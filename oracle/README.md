@@ -26,40 +26,16 @@ yarn
 
 ## Standalone Server Setup
 
-Configure a `.env` file in `kava-tools/scripts` (see [example](example-env)) :
+Configure a `.env` file in `./scripts` (see [example](example-env))
 
+Run the following commands to install dependencies and start the app:
 ```
-# the chain-id
-CHAIN_ID="kava-testnet-11000"
-
-# REST endpoint
-LCD_URL="http://localhost:1317"
-
-# Cron tab for how frequently prices will be posted (ex: 5 minutes)
-CRONTAB="*/5 * * * *"
-
-# bip39 mnemonic of oracle
-MNEMONIC="secret words go here"
-
-# List of markets the oracle will post prices for. See pricefeed parameters for the list of active markets.
-MARKET_IDS="bnb:usd,bnb:usd:30,btc:usd,btc:usd:30,xrp:usd,xrp:usd:30,busd:usd,busd:usd:30,kava:usd,kava:usd:30,hard:usd,hard:usd:30,usdx:usd"
-
-# percentage deviation from previous price needed to trigger a new price - (example 0.5%)
-DEVIATION="0.005"
-
-# how long (in seconds) each price will remain valid - this value should be equal to the amount of time it takes for you to respond to a server outage (example 4 hours )
-EXPIRY="14400"
-
-# how long (in seconds) before the oracle will consider a price expiring and post a new price, regardless of the value of deviation.
-# for example, if this is set to 600, the oracle will post a price any time the current posted price is expiring in less than 600 seconds.
-EXPIRY_THRESHOLD="300"
-
-# if the oracle should use the legacy HD path for kava (118). Setting to "true" will use 118, false will use 459
-LEGACY_HD_PATH="false"
-
-# if the oracle should include a fee when posting prices (in integer ukava units). Example will pay 10000ukava (.01 KAVA)
-FEE="10000"
+yarn install
+cd scripts
+node oracle.js
 ```
+
+## systemd
 
 Setup a `systemd` file to run the oracle process. An example with user `ubuntu` is as follows (note that the `nodejs` process is at `/usr/bin/nodejs`, this may be different depending on how you install node ):
 
